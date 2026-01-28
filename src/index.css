@@ -36,17 +36,18 @@ input[type="range"]:focus {
 
 .app-viewport {
    background: radial-gradient(circle at center, #0a0f1c 0%, #05070a 100%);
-   min-height: 100vh;
+   height: 100vh;
    display: flex;
    justify-content: center;
    align-items: center;
    font-family: "Orbitron", sans-serif;
-   padding: 1rem;
+   padding: 2rem 1rem;
 
    .cyber-card {
       position: relative;
       background: var(--panel-bg);
-      padding: clamp(1.5rem, 5vw, 3rem);
+      margin: 1rem 0;
+      padding: clamp(1.5rem, 4vw, 2rem);
       border-radius: 24px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
@@ -82,11 +83,10 @@ input[type="range"]:focus {
 
       .game-header {
          display: grid;
-         /* 1fr (equal left) | auto (center) | 1fr (equal right) */
          grid-template-columns: 1fr auto 1fr;
          align-items: center;
          width: 100%;
-         margin-bottom: 2.5rem;
+         margin-bottom: 2rem;
 
          /* Shared player box styles */
          .player-box {
@@ -160,8 +160,7 @@ input[type="range"]:focus {
          width: 100%;
 
          .cell {
-            /* aspect-ratio: 1 / 1; */
-            height: 100px;
+            aspect-ratio: 1 / 1;
             width: 100%;
 
             position: relative; /* Basis for centered content */
