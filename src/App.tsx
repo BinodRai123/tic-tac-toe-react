@@ -56,9 +56,20 @@ export default function App() {
             <div className="scanline"></div>
 
             <div className="game-header">
-               <div className="player-badge x">X: {xIsNext && !winner ? "ACTIVE" : ""}</div>
-               <div className="main-status">{winner ? "VICTORY" : isDraw ? "STALEMATE" : "vs"}</div>
-               <div className="player-badge o">O: {!xIsNext && !winner ? "ACTIVE" : ""}</div>
+               {/* Left Column */}
+               <div className={`player-box x ${xIsNext && !winner ? "active" : ""}`}>
+                  <span className="label">X</span>
+                  <span className="status-text">{xIsNext && !winner ? "ACTIVE" : ""}</span>
+               </div>
+
+               {/* Center Column */}
+               <div className="main-status">{winner ? "VICTORY" : isDraw ? "STALEMATE" : "VS"}</div>
+
+               {/* Right Column */}
+               <div className={`player-box o ${!xIsNext && !winner ? "active" : ""}`}>
+                  <span className="status-text">{!xIsNext && !winner ? "ACTIVE" : ""}</span>
+                  <span className="label">O</span>
+               </div>
             </div>
 
             <div className="grid-wrapper">
