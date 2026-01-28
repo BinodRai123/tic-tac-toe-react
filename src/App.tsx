@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import "./index.css";
 
 // 1. Define types for the game state
@@ -19,7 +19,11 @@ interface SquareProps {
 // Sub-component using the interface
 function Square({ value, onSquareClick, isWinningSquare }: SquareProps) {
    return (
-      <button className={`cell ${isWinningSquare ? "win-glow" : ""}`} onClick={onSquareClick}>
+      <button
+         className={`cell ${isWinningSquare ? "win-glow" : ""}`}
+         onClick={onSquareClick}
+         aria-label={value ? `Square ${value}` : "Empty square"}
+      >
          {value && <span className={`glyph ${value}`}>{value}</span>}
       </button>
    );
@@ -37,25 +41,29 @@ export default function App() {
    const winningLine = winInfo?.line || [];
    const isDraw = !winner && currentSquares.every((s) => s !== null);
 
-   function handlePlay(nextSquares: SquareValue[]): void {
-      const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
-      setHistory(nextHistory);
-      setCurrentMove(nextHistory.length - 1);
-   }
+   const handlePlay = useCallback(
+      (nextSquares: SquareValue[]): void => {
+         const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+         setHistory(nextHistory);
+         setCurrentMove(nextHistory.length - 1);
+      },
+      [history, currentMove],
+   );
 
    function handleClick(i: number): void {
       if (winner || currentSquares[i]) return;
       const nextSquares = currentSquares.slice();
       nextSquares[i] = xIsNext ? "X" : "O";
+
       handlePlay(nextSquares);
    }
 
    return (
-      <div className="app-viewport">
+      <main className="app-viewport">
          <div className={`cyber-card ${xIsNext ? "turn-x" : "turn-o"} ${winner ? "has-winner" : ""}`}>
             <div className="scanline"></div>
 
-            <div className="game-header">
+            <section className="game-header">
                {/* Left Column */}
                <div className={`player-box x ${xIsNext && !winner ? "active" : ""}`}>
                   <span className="label">X</span>
@@ -70,9 +78,9 @@ export default function App() {
                   <span className="status-text">{!xIsNext && !winner ? "ACTIVE" : ""}</span>
                   <span className="label">O</span>
                </div>
-            </div>
+            </section>
 
-            <div className="grid-wrapper">
+            <section className="grid-wrapper">
                <div className="grid">
                   {currentSquares.map((square, i) => (
                      <Square
@@ -83,12 +91,13 @@ export default function App() {
                      />
                   ))}
                </div>
-            </div>
+            </section>
 
-            <div className="controls">
+            <section className="controls">
                <div className="history-scrubber">
-                  <label>TIME TRAVEL: MOVE {currentMove}</label>
+                  <label htmlFor="history-scrubber">TIME TRAVEL: MOVE {currentMove}</label>
                   <input
+                     id="history-scrubber"
                      type="range"
                      min="0"
                      max={history.length - 1}
@@ -102,12 +111,13 @@ export default function App() {
                      setHistory([Array(9).fill(null)]);
                      setCurrentMove(0);
                   }}
+                  aria-label="Reboot system"
                >
                   REBOOT SYSTEM
                </button>
-            </div>
+            </section>
          </div>
-      </div>
+      </main>
    );
 }
 
